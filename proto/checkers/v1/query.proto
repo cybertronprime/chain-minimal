@@ -1,0 +1,32 @@
+syntax = "proto3";
+package checkers.v1;
+
+option go_package = "github.com/chain-minimal/x/checkers/types";
+import "checkers/v1/types.proto";
+import "google/api/annotations.proto";
+import "cosmos/query/v1/query.proto";
+import "gogoproto/gogo.proto";
+
+// Query defines the module Query service.
+service CheckersTorramQuery {
+  // GetGame returns the game at the requested index.
+  rpc GetCheckersTorramGm(ReqCheckersTorramQuery) returns (ResCheckersTorramQuery) {
+    option (cosmos.query.v1.module_query_safe) = true;
+    option (google.api.http).get =
+      "/alice/checkers/v1/game/{index}";
+  }
+}
+
+// ReqCheckersTorramQuery is the request type for the Query/GetGame RPC
+// method.
+message ReqCheckersTorramQuery {
+  // index defines the index of the game to retrieve.
+  string index = 1;
+}
+
+// ResCheckersTorramQuery is the response type for the Query/GetGame RPC
+// method.
+message ResCheckersTorramQuery {
+  // Game defines the game at the requested index.
+  StoredGame Game = 1;
+}

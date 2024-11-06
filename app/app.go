@@ -3,6 +3,8 @@ package app
 import (
 	_ "embed"
 	"io"
+	"os"
+	"path/filepath"
 
 	dbm "github.com/cosmos/cosmos-db"
 
@@ -11,7 +13,7 @@ import (
 	"cosmossdk.io/log"
 	storetypes "cosmossdk.io/store/types"
 
-	clienthelpers "cosmossdk.io/client/v2/helpers"
+	checkerskeeper "chain-minimal/x/checkers/keeper"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -30,8 +32,8 @@ import (
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 
-	appv1alpha1 "cosmossdk.io/api/cosmos/app/v1alpha1"
 	_ "cosmossdk.io/api/cosmos/tx/config/v1"          // import for side-effects
+	_ "chain-minimal/x/checkers"              // import for side-effects
 	_ "github.com/cosmos/cosmos-sdk/x/auth"           // import for side-effects
 	_ "github.com/cosmos/cosmos-sdk/x/auth/tx/config" // import for side-effects
 	_ "github.com/cosmos/cosmos-sdk/x/bank"           // import for side-effects
@@ -68,18 +70,19 @@ type MiniApp struct {
 	StakingKeeper         *stakingkeeper.Keeper
 	DistrKeeper           distrkeeper.Keeper
 	ConsensusParamsKeeper consensuskeeper.Keeper
+	CheckersKeeper        checkerskeeper.Keeper
 
 	// simulation manager
 	sm *module.SimulationManager
 }
 
 func init() {
-	var err error
-	clienthelpers.EnvPrefix = "MINI"
-	DefaultNodeHome, err = clienthelpers.GetNodeHomeDirectory(".minid")
+	userHomeDir, err := os.UserHomeDir()
 	if err != nil {
 		panic(err)
 	}
+
+	DefaultNodeHome = filepath.Join(userHomeDir, ".minid")
 }
 
 // AppConfig returns the default app config.
@@ -87,7 +90,6 @@ func AppConfig() depinject.Config {
 	return depinject.Configs(
 		appconfig.LoadYAML(AppConfigYAML),
 		depinject.Supply(
-			&appv1alpha1.Config{}, // hack until https://github.com/cosmos/cosmos-sdk/pull/21042
 			// supply custom module basics
 			map[string]module.AppModuleBasic{
 				genutiltypes.ModuleName: genutil.NewAppModuleBasic(genutiltypes.DefaultMessageValidator),
@@ -128,6 +130,7 @@ func NewMiniApp(
 		&app.StakingKeeper,
 		&app.DistrKeeper,
 		&app.ConsensusParamsKeeper,
+		&app.CheckersKeeper,
 	); err != nil {
 		return nil, err
 	}
