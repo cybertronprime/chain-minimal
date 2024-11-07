@@ -8,6 +8,8 @@ import (
 	"cosmossdk.io/collections"
 	"chain-minimal/x/checkers/types"
 	"chain-minimal/x/checkers/rules"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 )
 
 type msgServer struct {
@@ -29,13 +31,21 @@ func (ms msgServer) CheckersCreateGm(ctx context.Context, msg *types.ReqCheckers
 	if _, err := ms.k.StoredGames.Get(ctx, msg.Index); err == nil || errors.Is(err, collections.ErrEncoding) {
 		return nil, fmt.Errorf("game already exists at index: %s", msg.Index)
 	}
+	
 
 	newBoard := rules.New()
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+    blockTime := sdkCtx.HeaderInfo().Time
+
 	storedGame := types.StoredGame{
 		Board: newBoard.String(),
 		Turn:  rules.PieceStrings[newBoard.Turn],
 		Black: msg.Black,
 		Red:   msg.Red,
+		StartTime: blockTime.Unix(),
+		EndTime: 0,
+
+
 	}
 	if err := storedGame.Validate(); err != nil {
 		return nil, err
