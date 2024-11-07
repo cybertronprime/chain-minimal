@@ -1,7 +1,7 @@
 syntax = "proto3";
 package checkers.v1;
 
-option go_package = "github.com/chain-minimal/x/checkers/types";
+option go_package = "chain-minimal/x/checkers/types";
 import "checkers/v1/types.proto";
 import "google/api/annotations.proto";
 import "cosmos/query/v1/query.proto";
@@ -13,7 +13,7 @@ service CheckersTorramQuery {
   rpc GetCheckersTorramGm(ReqCheckersTorramQuery) returns (ResCheckersTorramQuery) {
     option (cosmos.query.v1.module_query_safe) = true;
     option (google.api.http).get =
-      "/alice/checkers/v1/game/{index}";
+      "/chain-minimal/checkers/v1/game/{index}";
   }
 }
 

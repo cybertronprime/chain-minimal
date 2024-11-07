@@ -4,7 +4,7 @@ import (
 	types "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/msgservice"
-	checkersv1 "chain-minimal/api/v1"
+	checkersv1 "chain-minimal/api/checkers/v1"
 )
 
 // RegisterInterfaces registers the interfaces types with the interface registry.

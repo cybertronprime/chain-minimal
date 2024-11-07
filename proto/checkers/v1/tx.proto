@@ -1,7 +1,7 @@
 syntax = "proto3";
 package checkers.v1;
 
-option go_package = "github.com/chain-minimal/x/checkers/types";
+option go_package = "chain-minimal/x/checkers/types";
 import "cosmos/msg/v1/msg.proto";
 import "gogoproto/gogo.proto";
 import "checkers/v1/types.proto";

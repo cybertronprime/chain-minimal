@@ -47,4 +47,4 @@ modules:
       "@type": cosmos.tx.config.v1.Config
   - name: checkers
     config:
-      "@type": alice.checkers.module.v1.Module
+      "@type": chain-minimal.checkers.module.v1
