@@ -22,7 +22,7 @@ This repository contains a working Cosmos SDK chain that implements a checkers g
 
 1. Clone and build the chain:
 ```bash
-git clone git@github.com:cosmosregistry/chain-minimal.git
+git clone https://github.com/cybertronprime/chain-minimal.git
 cd chain-minimal
 make install   # Install the minid binary
 make init      # Initialize the chain
