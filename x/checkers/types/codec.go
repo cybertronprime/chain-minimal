@@ -1,4 +1,4 @@
-package checkers
+package types
 
 import (
 	types "github.com/cosmos/cosmos-sdk/codec/types"

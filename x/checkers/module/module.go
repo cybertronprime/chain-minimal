@@ -13,7 +13,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"chain-minimal/x/checkers"
+	"chain-minimal/x/checkers/types"
     "chain-minimal/x/checkers/keeper"
 )
 
@@ -44,7 +44,7 @@ func NewAppModuleBasic(m AppModule) module.AppModuleBasic {
 }
 
 // Name returns the checkers module's name.
-func (AppModule) Name() string { return checkers.ModuleName }
+func (AppModule) Name() string { return types.ModuleName }
 
 // RegisterLegacyAminoCodec registers the checkers module's types on the LegacyAmino codec.
 // New modules do not need to support Amino.
@@ -55,14 +55,14 @@ func (AppModule) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *gwrunt
 	// if err := checkers.RegisterQueryHandlerClient(context.Background(), mux, checkers.NewQueryClient(clientCtx)); err != nil {
 	// 	panic(err)
 	// }
-	if err := checkers.RegisterCheckersTorramQueryHandlerClient(clientCtx.CmdContext, mux, checkers.NewCheckersTorramQueryClient(clientCtx)); err != nil {
+	if err := types.RegisterCheckersTorramQueryHandlerClient(clientCtx.CmdContext, mux, types.NewCheckersTorramQueryClient(clientCtx)); err != nil {
 		         panic(err)
 		      }
 }
 
 // RegisterInterfaces registers interfaces and implementations of the checkers module.
 func (AppModule) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
-	checkers.RegisterInterfaces(registry)
+	types.RegisterInterfaces(registry)
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
@@ -71,21 +71,21 @@ func (AppModule) ConsensusVersion() uint64 { return ConsensusVersion }
 // RegisterServices registers a gRPC query service to respond to the module-specific gRPC queries.
 func (am AppModule) RegisterServices(cfg module.Configurator) {
 	// Register servers
-	checkers.RegisterCheckersTorramServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
-	checkers.RegisterCheckersTorramQueryServer(cfg.QueryServer(), keeper.NewQueryServerImpl(am.keeper))
+	types.RegisterCheckersTorramServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
+	types.RegisterCheckersTorramQueryServer(cfg.QueryServer(), keeper.NewQueryServerImpl(am.keeper))
 
 }
 
 // DefaultGenesis returns default genesis state as raw bytes for the module.
 func (AppModule) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	return cdc.MustMarshalJSON(checkers.NewGenesisState())
+	return cdc.MustMarshalJSON(types.NewGenesisState())
 }
 
 // ValidateGenesis performs genesis state validation for the circuit module.
 func (AppModule) ValidateGenesis(cdc codec.JSONCodec, _ client.TxEncodingConfig, bz json.RawMessage) error {
-	var data checkers.GenesisState
+	var data types.GenesisState
 	if err := cdc.UnmarshalJSON(bz, &data); err != nil {
-		return fmt.Errorf("failed to unmarshal %s genesis state: %w", checkers.ModuleName, err)
+		return fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err)
 	}
 
 	return data.Validate()
@@ -94,11 +94,11 @@ func (AppModule) ValidateGenesis(cdc codec.JSONCodec, _ client.TxEncodingConfig,
 // InitGenesis performs genesis initialization for the checkers module.
 // It returns no validator updates.
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) {
-	var genesisState checkers.GenesisState
+	var genesisState types.GenesisState
 	cdc.MustUnmarshalJSON(data, &genesisState)
 
 	if err := am.keeper.InitGenesis(ctx, &genesisState); err != nil {
-		panic(fmt.Sprintf("failed to initialize %s genesis state: %v", checkers.ModuleName, err))
+		panic(fmt.Sprintf("failed to initialize %s genesis state: %v", types.ModuleName, err))
 	}
 }
 
@@ -107,7 +107,7 @@ func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
 	gs, err := am.keeper.ExportGenesis(ctx)
 	if err != nil {
-		panic(fmt.Sprintf("failed to export %s genesis state: %v", checkers.ModuleName, err))
+		panic(fmt.Sprintf("failed to export %s genesis state: %v", types.ModuleName, err))
 	}
 
 	return cdc.MustMarshalJSON(gs)

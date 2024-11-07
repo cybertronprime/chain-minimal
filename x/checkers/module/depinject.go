@@ -8,7 +8,7 @@ import (
 
     "github.com/cosmos/cosmos-sdk/codec"
     authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-    modulev1 "chain-minimal/api/module/v1"
+    modulev1 "chain-minimal/api/checkers/module/v1"
 
     "chain-minimal/x/checkers/keeper"
 )

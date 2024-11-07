@@ -8,13 +8,13 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"chain-minimal/x/checkers"
+	"chain-minimal/x/checkers/types"
 )
 
-var _ checkers.CheckersTorramQueryServer = queryServer{}
+var _ types.CheckersTorramQueryServer = queryServer{}
 
 // NewQueryServerImpl returns an implementation of the module QueryServer.
-func NewQueryServerImpl(k Keeper) checkers.CheckersTorramQueryServer {
+func NewQueryServerImpl(k Keeper) types.CheckersTorramQueryServer {
 	return queryServer{k}
 }
 
@@ -23,13 +23,13 @@ type queryServer struct {
 }
 
 // GetGame defines the handler for the Query/GetGame RPC method.
-func (qs queryServer) GetCheckersTorramGm(ctx context.Context, req *checkers.ReqCheckersTorramQuery) (*checkers.ResCheckersTorramQuery, error) {
+func (qs queryServer) GetCheckersTorramGm(ctx context.Context, req *types.ReqCheckersTorramQuery) (*types.ResCheckersTorramQuery, error) {
 	game, err := qs.k.StoredGames.Get(ctx, req.Index)
 	if err == nil {
-		return &checkers.ResCheckersTorramQuery{Game: &game}, nil
+		return &types.ResCheckersTorramQuery{Game: &game}, nil
 	}
 	if errors.Is(err, collections.ErrNotFound) {
-		return &checkers.ResCheckersTorramQuery{Game: nil}, nil
+		return &types.ResCheckersTorramQuery{Game: nil}, nil
 	}
 
 	return nil, status.Error(codes.Internal, err.Error())

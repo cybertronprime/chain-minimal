@@ -8,7 +8,7 @@ import (
 	storetypes "cosmossdk.io/core/store"
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	"chain-minimal/x/checkers"
+	"chain-minimal/x/checkers/types"
 )
 
 type Keeper struct {
@@ -21,8 +21,8 @@ type Keeper struct {
 
 	// state management
 	Schema      collections.Schema
-	Params      collections.Item[checkers.Params]
-	StoredGames collections.Map[string, checkers.StoredGame]
+	Params      collections.Item[types.Params]
+	StoredGames collections.Map[string, types.StoredGame]
 }
 
 // NewKeeper creates a new Keeper instance
@@ -36,10 +36,10 @@ func NewKeeper(cdc codec.BinaryCodec, addressCodec address.Codec, storeService s
 		cdc:          cdc,
 		addressCodec: addressCodec,
 		authority:    authority,
-		Params:       collections.NewItem(sb, checkers.ParamsKey, "params", codec.CollValue[checkers.Params](cdc)),
+		Params:       collections.NewItem(sb, types.ParamsKey, "params", codec.CollValue[types.Params](cdc)),
 		StoredGames: collections.NewMap(sb,
-			checkers.StoredGamesKey, "storedGames", collections.StringKey,
-			codec.CollValue[checkers.StoredGame](cdc)),
+			types.StoredGamesKey, "storedGames", collections.StringKey,
+			codec.CollValue[types.StoredGame](cdc)),
 	}
 
 	schema, err := sb.Build()

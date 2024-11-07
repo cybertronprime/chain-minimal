@@ -1,4 +1,4 @@
-package checkers
+package types
 
 import "cosmossdk.io/errors"
 

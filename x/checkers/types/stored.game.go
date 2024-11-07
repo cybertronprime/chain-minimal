@@ -1,11 +1,11 @@
-package checkers
-
+package types
 import (
 	fmt "fmt"
 
 	"cosmossdk.io/errors"
 	"chain-minimal/x/checkers/rules"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+		
 )
 
 func (storedGame StoredGame) GetBlackAddress() (black sdk.AccAddress, err error) {

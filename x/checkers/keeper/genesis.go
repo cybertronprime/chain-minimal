@@ -3,11 +3,11 @@ package keeper
 import (
 	"context"
 
-	"chain-minimal/x/checkers"
+	"chain-minimal/x/checkers/types"
 )
 
 // InitGenesis initializes the module state from a genesis state.
-func (k *Keeper) InitGenesis(ctx context.Context, data *checkers.GenesisState) error {
+func (k *Keeper) InitGenesis(ctx context.Context, data *types.GenesisState) error {
 	if err := k.Params.Set(ctx, data.Params); err != nil {
 		return err
 	}
@@ -22,15 +22,15 @@ func (k *Keeper) InitGenesis(ctx context.Context, data *checkers.GenesisState) e
 }
 
 // ExportGenesis exports the module state to a genesis state.
-func (k *Keeper) ExportGenesis(ctx context.Context) (*checkers.GenesisState, error) {
+func (k *Keeper) ExportGenesis(ctx context.Context) (*types.GenesisState, error) {
 	params, err := k.Params.Get(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	var indexedStoredGames []checkers.IndexedStoredGame
-	if err := k.StoredGames.Walk(ctx, nil, func(index string, storedGame checkers.StoredGame) (bool, error) {
-		indexedStoredGames = append(indexedStoredGames, checkers.IndexedStoredGame{
+	var indexedStoredGames []types.IndexedStoredGame
+	if err := k.StoredGames.Walk(ctx, nil, func(index string, storedGame types.StoredGame) (bool, error) {
+		indexedStoredGames = append(indexedStoredGames, types.IndexedStoredGame{
 			Index:      index,
 			StoredGame: storedGame,
 		})
@@ -39,7 +39,7 @@ func (k *Keeper) ExportGenesis(ctx context.Context) (*checkers.GenesisState, err
 		return nil, err
 	}
 
-	return &checkers.GenesisState{
+	return &types.GenesisState{
 		Params:                params,
 		IndexedStoredGameList: indexedStoredGames,
 	}, nil
