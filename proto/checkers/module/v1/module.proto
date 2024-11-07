@@ -3,7 +3,7 @@ syntax = "proto3";
 package checkers.module.v1;
 
 import "cosmos/app/v1alpha1/module.proto";
-option go_package = "chain-minimal/x/checkers";
+// option go_package = "chain-minimal/x/checkers";
 
 
 // Module is the app config object of the module.
