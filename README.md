@@ -119,8 +119,17 @@ The chain includes several key components:
 - Custom checkers module
 - Cosmos SDK core modules (auth, bank, staking)
 - Minimal dependency set for optimal performance
+## Testing
 
-## Useful Links
+### Running Tests
+To run all tests in the chain:
+
+To run specific module tests (e.g., checkers module):
+```bash
+go test ./x/checkers/... -v
+```
+
+## Useful Links 
 
 * [Cosmos-SDK Documentation](https://docs.cosmos.network/)
 * [Cosmos Network](https://cosmos.network/)
